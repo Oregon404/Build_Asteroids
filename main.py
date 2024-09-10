@@ -1,4 +1,5 @@
 import pygame
+import sys
 from constants import *
 from player import Player
 from asteroid import Asteroid
@@ -6,6 +7,13 @@ from asteroidfield import AsteroidField
 
 def main():
     pygame.init()
+    pygame.font.init()
+    my_font = pygame.font.SysFont('Comic Sans MS', 30)
+    text_surface = my_font.render('Game Over!', False, (0, 0, 0))
+    surface = pygame.Surface((200, 100))
+    surface.fill((0, 0, 0))  # Fill with black
+    text_surface = my_font.render('Game Over!', True, (255, 0, 0))
+    surface.blit(text_surface, (10, 10))
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     Clock = pygame.time.Clock()
     dt = 0
@@ -23,10 +31,18 @@ def main():
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                return
+                sys.exit()
             
         for item in updatable:
             item.update(dt)
+
+        for astroid in asteroids:
+            if astroid.collision_detection(player):
+                screen.fill((0, 0, 0))
+                screen.blit(text_surface, (SCREEN_WIDTH / 2 - text_surface.get_width() / 2, SCREEN_HEIGHT / 2 - text_surface.get_height() / 2))
+                pygame.display.flip()
+                pygame.time.wait(2000)
+                sys.exit()
 
         screen.fill((0, 0, 0))
 
