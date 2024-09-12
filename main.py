@@ -49,7 +49,9 @@ def main():
             for shot in shots:
                 if astroid.collision_detection(shot):
                     shot.kill()
-                    astroid.kill()
+                    split_asteroids = astroid.split()
+                    if split_asteroids:
+                        asteroids.add(*split_asteroids)
                     pygame.display.flip()
 
         screen.fill((0, 0, 0))
